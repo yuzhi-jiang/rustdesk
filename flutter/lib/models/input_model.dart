@@ -1284,6 +1284,8 @@ class InputModel {
   }
 
   void onPointHoverImage(PointerHoverEvent e) {
+    debugPrint(
+        '[DIAG #15630] hover kind=${e.kind} dev=${e.device} pos=${e.position} delta=${e.delta} btns=${e.buttons}');
     _stopFling = true;
     if (isViewOnly && !showMyCursor) return;
     if (e.kind != ui.PointerDeviceKind.mouse) return;
@@ -1326,6 +1328,8 @@ class InputModel {
 
   // https://docs.flutter.dev/release/breaking-changes/trackpad-gestures
   void onPointerPanZoomUpdate(PointerPanZoomUpdateEvent e) {
+    debugPrint(
+        '[DIAG #15630] panzoom kind=${e.kind} dev=${e.device} pan=${e.pan} scale=${e.scale.toStringAsFixed(3)} pos=${e.position}');
     if (isViewOnly) return;
     if (isViewCamera) return;
     if (peerPlatform != kPeerPlatformAndroid) {
@@ -1511,7 +1515,8 @@ class InputModel {
   }
 
   void onPointDownImage(PointerDownEvent e) {
-    debugPrint("onPointDownImage ${e.kind}");
+    debugPrint(
+        '[DIAG #15630] down kind=${e.kind} dev=${e.device} pos=${e.position} delta=${e.delta} btns=${e.buttons}');
     _stopFling = true;
     if (isDesktop) _queryOtherWindowCoords = true;
     _remoteWindowCoords = [];
@@ -1556,6 +1561,8 @@ class InputModel {
   }
 
   void onPointUpImage(PointerUpEvent e) {
+    debugPrint(
+        '[DIAG #15630] up kind=${e.kind} dev=${e.device} pos=${e.position} delta=${e.delta} btns=${e.buttons}');
     if (isDesktop) _queryOtherWindowCoords = false;
     if (isViewOnly && !showMyCursor) return;
     if (isViewCamera) return;
@@ -1579,6 +1586,8 @@ class InputModel {
   }
 
   void onPointMoveImage(PointerMoveEvent e) {
+    debugPrint(
+        '[DIAG #15630] move kind=${e.kind} dev=${e.device} pos=${e.position} delta=${e.delta} btns=${e.buttons}');
     if (isViewOnly && !showMyCursor) return;
     if (isViewCamera) return;
     if (e.kind != ui.PointerDeviceKind.mouse) return;

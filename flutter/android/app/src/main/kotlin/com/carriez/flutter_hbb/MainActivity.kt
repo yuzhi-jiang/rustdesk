@@ -18,6 +18,7 @@ import android.os.Bundle
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
+import android.view.MotionEvent
 import android.view.WindowManager
 import android.media.MediaCodecInfo
 import android.media.MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface
@@ -49,6 +50,29 @@ class MainActivity : FlutterActivity() {
 
     private var isAudioStart = false
     private val audioRecordHandle = AudioRecordHandle(this, { false }, { isAudioStart })
+
+    // [DIAG #15630] temporary: log raw trackpad/touch MotionEvents to determine how
+    // single-finger trackpad motion is classified (source/toolType/action) before Flutter
+    // consumes it. Remove after diagnosis.
+    override fun dispatchGenericMotionEvent(event: MotionEvent): Boolean {
+        Log.d(
+            "rd_trackpad",
+            "generic act=${event.actionMasked} src=0x${Integer.toHexString(event.source)} " +
+                "tool=${event.toolType} n=${event.pointerCount} x=${event.x} y=${event.y} " +
+                "rawX=${event.rawX} rawY=${event.rawY} dev=${event.device?.name}"
+        )
+        return super.dispatchGenericMotionEvent(event)
+    }
+
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        Log.d(
+            "rd_trackpad",
+            "touch act=${event.actionMasked} src=0x${Integer.toHexString(event.source)} " +
+                "tool=${event.toolType} n=${event.pointerCount} x=${event.x} y=${event.y} " +
+                "dev=${event.device?.name}"
+        )
+        return super.dispatchTouchEvent(event)
+    }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
